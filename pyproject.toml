@@ -2,7 +2,7 @@
 name = "running_page"
 version = "2.5.1"
 description = "Default template for PDM package"
-authors = [{ name = "yihong0618", email = "zouzou0208@gmail.com" }]
+authors = [{ name = "saymagic", email = "zouzou0208@gmail.com" }]
 dependencies = [
   "httpx",
   "gpxpy==1.6.2",
@@ -36,6 +36,7 @@ dependencies = [
   "pycryptodome",
   "duckdb",
   "openai",
+  "playwright",
   "svglib>=1.5.1",
   "cairosvg>=2.7.1",
   "certifi==2025.1.31",

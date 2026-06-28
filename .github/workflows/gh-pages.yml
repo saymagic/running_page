@@ -2,6 +2,18 @@ name: Publish GitHub Pages
 
 # Controls when the action will run.
 on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/gh-pages.yml'
+      - 'assets/**'
+      - 'public/**'
+      - 'src/**'
+      - 'index.html'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'vite.config.ts'
   workflow_dispatch:
     inputs:
       save_data_in_github_cache:
@@ -92,7 +104,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Build
         env:
           REPO_NAME: ${{ github.event.repository.name }}

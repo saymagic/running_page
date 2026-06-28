@@ -22,13 +22,14 @@ on:
       - run_page/keep_to_strava_sync.py
       - run_page/oppo_sync.py
       - run_page/intervals_icu_sync.py
+      - run_page/apple_health_sync.py
       - requirements.txt
 
 env:
   # please change to your own config.
-  RUN_TYPE: pass # support strava/nike/garmin/coros/garmin_cn/garmin_sync_cn_global/keep/only_gpx/only_fit/nike_to_strava/strava_to_garmin/tcx_to_garmin/strava_to_garmin_cn/garmin_to_strava/garmin_to_strava_cn/oppo/intervals_icu/db_updater, Please change the 'pass' it to your own
-  ATHLETE: yihong0618
-  TITLE: Yihong0618 Running
+  RUN_TYPE: pass # support strava/nike/garmin/coros/garmin_cn/garmin_sync_cn_global/keep/only_gpx/only_fit/nike_to_strava/strava_to_garmin/tcx_to_garmin/strava_to_garmin_cn/garmin_to_strava/garmin_to_strava_cn/oppo/intervals_icu/apple_health/db_updater, Please change the 'pass' it to your own
+  ATHLETE: saymagic
+  TITLE: saymagic Running
   MIN_GRID_DISTANCE: 10 # change min distance here
   TITLE_GRID: Over 10km Runs # also here
 
@@ -65,13 +66,15 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: pip
-          cache-dependency-path: 'requirements.txt'
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: uv sync
 
       - name: Install Cloudflare WARP
         if: env.USE_CLOUDFLARE_WARP == 'true'
@@ -103,6 +106,7 @@ jobs:
             TCX_OUT
             FIT_OUT
             Workouts
+            apple_health_export
             run_page/data.db
             src/static/activities.json
             imported.json
@@ -114,120 +118,132 @@ jobs:
       - name: Run sync Nike script
         if: env.RUN_TYPE == 'nike'
         run: |
-          python run_page/nike_sync.py ${{ secrets.NIKE_REFRESH_TOKEN }}
+          uv run python run_page/nike_sync.py ${{ secrets.NIKE_REFRESH_TOKEN }}
 
       - name: Run sync Nike to Strava(Run with nike data backup and show with strava)
         if: env.RUN_TYPE == 'nike_to_strava'
         run: |
-          python run_page/nike_to_strava_sync.py ${{ secrets.NIKE_REFRESH_TOKEN }} ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}
+          uv run python run_page/nike_to_strava_sync.py ${{ secrets.NIKE_REFRESH_TOKEN }} ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}
 
       - name: Run sync Keep script
         if: env.RUN_TYPE == 'keep'
         run: |
-          python run_page/keep_sync.py ${{ secrets.KEEP_MOBILE }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
+          uv run python run_page/keep_sync.py ${{ secrets.KEEP_MOBILE }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
 
       - name: Run sync Coros script
         if: env.RUN_TYPE == 'coros'
         run: |
-          python run_page/coros_sync.py ${{ secrets.COROS_ACCOUNT }} ${{ secrets.COROS_PASSWORD }}
+          uv run python run_page/coros_sync.py ${{ secrets.COROS_ACCOUNT }} ${{ secrets.COROS_PASSWORD }}
         # If you only want to sync 'type running' add args --only-run, default script is to sync all data (rides , swims, strengths trains, hikes, runs, etc.).
-        # python run_page/coros_sync.py ${{ secrets.COROS_ACCOUNT }} ${{ secrets.COROS_PASSWORD }} --only-run
+        # uv run python run_page/coros_sync.py ${{ secrets.COROS_ACCOUNT }} ${{ secrets.COROS_PASSWORD }} --only-run
 
       - name: Run sync Keep_to_strava script
         if: env.RUN_TYPE == 'keep_to_strava_sync'
         run: |
-          python run_page/keep_to_strava_sync.py ${{ secrets.KEEP_MOBILE }} ${{ secrets.KEEP_PASSWORD }} ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }} --sync-types running cycling hiking
+          uv run python run_page/keep_to_strava_sync.py ${{ secrets.KEEP_MOBILE }} ${{ secrets.KEEP_PASSWORD }} ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }} --sync-types running cycling hiking
         # If you only want to sync 'type running' modify args --sync-types running, default script is to sync all data (rides, hikes and runs).
 
       - name: Run sync Strava script
         if: env.RUN_TYPE == 'strava'
         run: |
-          python run_page/strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}
+          uv run python run_page/strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}
         # If you only want to sync 'type running' add args --only-run, default script is to sync all data (rides and runs).
 
       # for garmin if you want generate 'tcx' you can add --tcx command in the args.
       - name: Run sync Garmin script
         if: env.RUN_TYPE == 'garmin'
         run: |
-          python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }}
+          uv run python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }}
         # make garmin secret string 'python run_page/get_garmin_secret.py ${email} ${password}'
         # If you only want to sync 'type running' add args --only-run, default script is to sync all data (rides and runs).
-        # python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }} --only-run
+        # uv run python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }} --only-run
 
       - name: Run sync Garmin CN script
         if: env.RUN_TYPE == 'garmin_cn'
         run: |
-          python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }} --is-cn
+          uv run python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }} --is-cn
         # make garmin secret string 'python run_page/get_garmin_secret.py ${email} ${password} --is-cn'
         # If you only want to sync 'type running' add args --only-run, default script is to sync all data (rides and runs).
-        # python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }}  --only-run --is-cn
+        # uv run python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }}  --only-run --is-cn
 
       - name: Run sync Garmin CN to Garmin script
         if: env.RUN_TYPE == 'garmin_sync_cn_global'
         run: |
-          python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}
+          uv run python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}
         # make garmin secret string 'python run_page/garmin_sync_cn_global.py ${email} ${password} --is-cn'
         # If you only want to sync 'type running' add args --only-run, default script is to sync all data (rides and runs).
-        # python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}  --only-run
+        # uv run python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}  --only-run
 
       - name: Run sync Only GPX script
         if: env.RUN_TYPE == 'only_gpx'
         run: |
-          python run_page/gpx_sync.py
+          uv run python run_page/gpx_sync.py
 
       - name: Run sync Only FIT script
         if: env.RUN_TYPE == 'only_fit'
         run: |
-          python run_page/fit_sync.py
+          uv run python run_page/fit_sync.py
 
       - name: Run sync Only TCX script
         if: env.RUN_TYPE == 'only_tcx'
         run: |
-          python run_page/tcx_sync.py
+          uv run python run_page/tcx_sync.py
 
       - name: Run sync Strava to Garmin(Run with strava(or others upload to strava) data backup in Garmin)
         if: env.RUN_TYPE == 'strava_to_garmin'
         run: |
-          python run_page/strava_to_garmin_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING }} ${{ secrets.STRAVA_EMAIL }} ${{ secrets.STRAVA_PASSWORD }}
+          uv run python run_page/strava_to_garmin_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING }} ${{ secrets.STRAVA_EMAIL }} ${{ secrets.STRAVA_PASSWORD }}
 
       - name: Run sync Strava to Garmin-cn(Run with strava(or others upload to strava) data backup in Garmin-cn)
         if: env.RUN_TYPE == 'strava_to_garmin_cn'
         run: |
-          python run_page/strava_to_garmin_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.STRAVA_EMAIL }} ${{ secrets.STRAVA_PASSWORD }} ${{ secrets.STRAVA_JWT }} --is-cn
+          uv run python run_page/strava_to_garmin_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.STRAVA_EMAIL }} ${{ secrets.STRAVA_PASSWORD }} ${{ secrets.STRAVA_JWT }} --is-cn
 
       - name: Run sync Garmin-cn to Strava(Run with Garmin data backup in Strava)
         if: env.RUN_TYPE == 'garmin_to_strava_cn'
         run: |
-          python run_page/garmin_to_strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING_CN }}  --is-cn
+          uv run python run_page/garmin_to_strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_SECRET_STRING_CN }}  --is-cn
 
       - name: Run sync Garmin to Strava(Run with Garmin data backup in Strava)
         if: env.RUN_TYPE == 'garmin_to_strava'
         run: |
-          python run_page/garmin_to_strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }}
+          uv run python run_page/garmin_to_strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}  ${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }}
 
       - name: Run sync Tulipsport script
         if: env.RUN_TYPE == 'tulipsport'
         run: |
-          python run_page/tulipsport_sync.py ${{ secrets.TULIPSPORT_TOKEN }} --with-gpx
+          uv run python run_page/tulipsport_sync.py ${{ secrets.TULIPSPORT_TOKEN }} --with-gpx
  
       - name: Run sync Oppo heytap script, note currently this script is not worked
         if: env.RUN_TYPE == 'oppo'
         run: |
-          python run_page/oppo_sync.py ${{ secrets.OPPO_ID }} ${{ secrets.OPPO_CLIENT_SECRET }} ${{ secrets.OPPO_CLIENT_REFRESH_TOKEN }} --with-tcx
+          uv run python run_page/oppo_sync.py ${{ secrets.OPPO_ID }} ${{ secrets.OPPO_CLIENT_SECRET }} ${{ secrets.OPPO_CLIENT_REFRESH_TOKEN }} --with-tcx
         # If you want to sync fit activity in gpx format, please consider the following script:
-        # python run_page/oppo_sync.py ${{ secrets.OPPO_ID }} ${{ secrets.OPPO_CLIENT_SECRET }} ${{ secrets.OPPO_CLIENT_REFRESH_TOKEN }} --with-gpx
+        # uv run python run_page/oppo_sync.py ${{ secrets.OPPO_ID }} ${{ secrets.OPPO_CLIENT_SECRET }} ${{ secrets.OPPO_CLIENT_REFRESH_TOKEN }} --with-gpx
 
       - name: Run sync Intervals.icu script
         if: env.RUN_TYPE == 'intervals_icu'
         run: |
-          python run_page/intervals_icu_sync.py ${{ secrets.INTERVALS_ICU_ATHLETE_ID }} ${{ secrets.INTERVALS_ICU_API_KEY }}
+          uv run python run_page/intervals_icu_sync.py ${{ secrets.INTERVALS_ICU_ATHLETE_ID }} ${{ secrets.INTERVALS_ICU_API_KEY }}
         # Default syncs running activities only. To sync all types add --all
         # To change start date: --start-date 2020-01-01 (default: 2015-01-01)
+
+      - name: Run sync Apple Health (Apple Watch) script
+        if: env.RUN_TYPE == 'apple_health'
+        run: |
+          uv run python run_page/apple_health_sync.py ${{ secrets.APPLE_HEALTH_EXPORT_PATH }}
+        # The APPLE_HEALTH_EXPORT_PATH secret should point to the Apple Health export data
+        # For GitHub Actions, this typically uses a cached export directory.
+        # Place your export.xml (or extracted apple_health_export folder) in the repo
+        # or in GitHub Cache, then set the secret to the path.
+        # Example: set APPLE_HEALTH_EXPORT_PATH to "apple_health_export"
+        # If you only want to sync 'type running' add args --only-run
+        # uv run python run_page/apple_health_sync.py ${{ secrets.APPLE_HEALTH_EXPORT_PATH }} --only-run
 
       - name: Run db updater script to add 'Elevation Gain' field to db
         if: env.RUN_TYPE == 'db_updater'
         run: |
-          python run_page/db_updater.py
+          uv run python run_page/db_updater.py
 
       - name: Make svg GitHub profile
         if: env.RUN_TYPE != 'pass'
@@ -237,37 +253,37 @@ jobs:
           ATHLETE: ${{ env.ATHLETE }}
           MIN_GRID_DISTANCE: ${{ env.MIN_GRID_DISTANCE }}
         run: |
-          python run_page/gen_svg.py --from-db --title "$TITLE" --type github --github-style "align-firstday" --athlete "$ATHLETE" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
-          python run_page/gen_svg.py --from-db --title "$TITLE_GRID" --type grid --athlete "$ATHLETE" --output assets/grid.svg --special-color yellow --special-color2 red --special-distance 20 --special-distance2 40 --use-localtime --min-distance "$MIN_GRID_DISTANCE"
-          python run_page/gen_svg.py --from-db --type circular --use-localtime
-          python run_page/gen_svg.py --from-db --year $(date +"%Y")  --language zh_CN --title "$(date +"%Y") Running" --type github --github-style "align-firstday" --athlete "$ATHLETE" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github_$(date +"%Y").svg --use-localtime --min-distance 0.5
+          uv run python run_page/gen_svg.py --from-db --title "$TITLE" --type github --github-style "align-firstday" --athlete "$ATHLETE" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
+          uv run python run_page/gen_svg.py --from-db --title "$TITLE_GRID" --type grid --athlete "$ATHLETE" --output assets/grid.svg --special-color yellow --special-color2 red --special-distance 20 --special-distance2 40 --use-localtime --min-distance "$MIN_GRID_DISTANCE"
+          uv run python run_page/gen_svg.py --from-db --type circular --use-localtime
+          uv run python run_page/gen_svg.py --from-db --year $(date +"%Y")  --language zh_CN --title "$(date +"%Y") Running" --type github --github-style "align-firstday" --athlete "$ATHLETE" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github_$(date +"%Y").svg --use-localtime --min-distance 0.5
 
         # if you want use the style:the start day of each year always aligns with Monday. please use the following script:
-        # python run_page/gen_svg.py --from-db --title "${{ env.TITLE }}" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
-        # python run_page/gen_svg.py --from-db --year $(date +"%Y")  --language zh_CN --title "$(date +"%Y") Running" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github_$(date +"%Y").svg --use-localtime --min-distance 0.5
+        # uv run python run_page/gen_svg.py --from-db --title "${{ env.TITLE }}" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
+        # uv run python run_page/gen_svg.py --from-db --year $(date +"%Y")  --language zh_CN --title "$(date +"%Y") Running" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github_$(date +"%Y").svg --use-localtime --min-distance 0.5
       - name: Make month of life
         if: env.GENERATE_MONTH_OF_LIFE == 'true'
         env:
           BIRTHDAY_MONTH: ${{ env.BIRTHDAY_MONTH }}
         run: |
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_running.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Runner Month of Life" --sport-type running
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_walking.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Walker Month of Life" --sport-type walking
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_hiking.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Hiker Month of Life" --sport-type hiking
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_cycling.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Cyclist Month of Life" --sport-type cycling
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Month of Life" --sport-type all
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_swimming.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Swimmer Month of Life" --sport-type swimming
-          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_skiing.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Skier Month of Life" --sport-type skiing
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_running.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Runner Month of Life" --sport-type running
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_walking.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Walker Month of Life" --sport-type walking
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_hiking.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Hiker Month of Life" --sport-type hiking
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_cycling.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Cyclist Month of Life" --sport-type cycling
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Month of Life" --sport-type all
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_swimming.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Swimmer Month of Life" --sport-type swimming
+          uv run python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color "#f9d367"  --special-color2 "#f0a1a8" --output assets/mol_skiing.svg --use-localtime --athlete "${{env.ATHLETE}}" --title "Skier Month of Life" --sport-type skiing
 
       - name: Make year summary
         if: env.GENERATE_MONTH_OF_LIFE == 'true'
         run: |
-          python run_page/gen_svg.py --from-db --type year_summary --output assets/year_summary.svg --athlete "${{ env.ATHLETE }}"
+          uv run python run_page/gen_svg.py --from-db --type year_summary --output assets/year_summary.svg --athlete "${{ env.ATHLETE }}"
 
       - name: Save data to parqent
         if: env.SAVE_TO_PARQENT == 'true'
         run: |
-          pip install duckdb==1.1.0
-          python run_page/save_to_parqent.py
+          uv pip install duckdb==1.1.0
+          uv run python run_page/save_to_parqent.py
 
       - name: Disconnect Cloudflare WARP
         if: env.USE_CLOUDFLARE_WARP == 'true'

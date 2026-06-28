@@ -22,15 +22,15 @@
    - For old data: To include `Elevation Gain` for past activities, perform a full reimport.
    - To show the 'Elevation Gain' column, modify `SHOW_ELEVATION_GAIN` in `src/utils/const.ts`
    - note: `Elevation Gain` may be inaccurate. You can use Strava's "Correct Elevation" or Garmin's "Elev Corrections" feature for more precise data.
-6. 本项目现在默认使用 MapCN（免费）。如果你选择使用 Mapbox，请获取你自己的 token。请勿使用项目维护者的 token - 查看此 [issue](https://github.com/yihong0618/running_page/issues/643) 和 [issue #1055](https://github.com/yihong0618/running_page/issues/1055)
+6. 本项目现在默认使用 MapCN（免费）。如果你选择使用 Mapbox，请获取你自己的 token。请勿使用项目维护者的 token - 查看此 [issue](https://github.com/saymagic/running_page/issues/643) 和 [issue #1055](https://github.com/saymagic/running_page/issues/1055)
 
-![running_page](https://socialify.git.ci/yihong0618/running_page/image?description=1&font=Inter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2Fshaonianche%2Fgallery%2Fmaster%2Frunning_page%2Frunning_page_logo_150*150.jpg&owner=1&pulls=1&stargazers=1&theme=Light)
+![running_page](https://socialify.git.ci/saymagic/running_page/image?description=1&font=Inter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2Fshaonianche%2Fgallery%2Fmaster%2Frunning_page%2Frunning_page_logo_150*150.jpg&owner=1&pulls=1&stargazers=1&theme=Light)
 
-# [这里是白银越野赛全部 21 位逝者的故事](https://github.com/yihong0618/running_page/issues/135)
+# [这里是白银越野赛全部 21 位逝者的故事](https://github.com/saymagic/running_page/issues/135)
 
 R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 
-# [打造个人跑步主页](https://yihong.run/running)
+# [打造个人跑步主页](https://run.saymagic.cn/running)
 
 [English](README.md) | 简体中文 | [Wiki](https://wiki.mfydev.run/)
 
@@ -43,7 +43,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 
 </details>
 
-## [大家的跑步主页展示](https://github.com/yihong0618/running_page/issues/12)
+## [大家的跑步主页展示](https://github.com/saymagic/running_page/issues/12)
 
 <details>
 <summary>Running page runners</summary>
@@ -54,7 +54,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 | ------------------------------------------------- | ---------------------------------------------- | ----------- |
 | [zhubao315](https://github.com/zhubao315)         | <https://zhubao315.github.io/running>          | Strava      |
 | [shaonianche](https://github.com/shaonianche)     | <https://run.duanfei.org>                      | Strava      |
-| [yihong0618](https://github.com/yihong0618)       | <https://yihong.run>                           | Nike        |
+| [saymagic](https://github.com/saymagic)       | <https://run.saymagic.cn>                           | Apple Watch |
 | [superleeyom](https://github.com/superleeyom)     | <https://running.leeyom.top>                   | Strava      |
 | [geekplux](https://github.com/geekplux)           | <https://activities.geekplux.com>              | Nike        |
 | [guanlan](https://github.com/guanlan)             | <https://grun.vercel.app>                      | Strava      |
@@ -134,7 +134,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 
 ## 它是怎么工作的
 
-![image](https://github.com/yihong0618/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
+![image](https://github.com/saymagic/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
 
 ## 特性
 
@@ -192,7 +192,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 ## 下载
 
 ```bash
-git clone https://github.com/yihong0618/running_page.git --depth=1
+git clone https://github.com/saymagic/running_page.git --depth=1
 ```
 
 ## 安装及测试 (node >= 20 python >= 3.11)
@@ -330,17 +330,17 @@ const MAP_TILE_ACCESS_TOKEN = 'your_access_token_here';
 ```typescript
 siteMetadata: {
   siteTitle: 'Running Page', #网站标题
-  siteUrl: 'https://yihong.run', #网站域名
+  siteUrl: 'https://run.saymagic.cn', #网站域名
   logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU', #左上角 LOGO
   description: 'Personal site and blog',
   navLinks: [
     {
       name: 'Blog', #右上角导航名称
-      url: 'https://yihong.run/running', #右上角导航链接
+      url: 'https://run.saymagic.cn/running', #右上角导航链接
     },
     {
       name: 'About',
-      url: 'https://github.com/yihong0618/running_page/blob/master/README-CN.md',
+      url: 'https://github.com/saymagic/running_page/blob/master/README-CN.md',
     },
   ],
 },
@@ -518,7 +518,7 @@ python run_page/joyrun_sync.py ${your mobile} ${your 验证码} --athlete ${your
 示例：
 
 ```bash
-python run_page/joyrun_sync.py 13333xxxx xxxx --athlete yihong0618
+python run_page/joyrun_sync.py 13333xxxx xxxx --athlete saymagic
 ```
 
 joyrun 导出 gpx 文件
@@ -548,7 +548,7 @@ python run_page/joyrun_sync.py 1393xx30xxxx 97e5fe4997d20f9b1007xxxxx --from-uid
 > 支持配置 min_grid_distance，默认为 10
 
 ```bash
-python run_page/joyrun_sync.py 13333xxxx xxxx --athlete yihong0618 --min_grid_distance 5
+python run_page/joyrun_sync.py 13333xxxx xxxx --athlete saymagic --min_grid_distance 5
 ```
 
 </details>
@@ -717,7 +717,7 @@ python run_page/garmin_sync_cn_global.py ${garmin_cn_secret_string} ${garmin_sec
 
    ![tg_image_166091873](https://github.com/user-attachments/assets/9d4851d6-849a-4bb7-8ffe-5358fa7328b2)
 
-   如果你想自动化同步 NRC 中的运动数据，去 [issue692](https://github.com/yihong0618/running_page/issues/692#issuecomment-2218849713)中查看相关内容。
+   如果你想自动化同步 NRC 中的运动数据，去 [issue692](https://github.com/saymagic/running_page/issues/692#issuecomment-2218849713)中查看相关内容。
 
 </details>
 
@@ -988,7 +988,7 @@ python run_page/nike_to_strava_sync.py eyJhbGciThiMTItNGIw******  xxx xxx xxx
 
    如果要在同步到 Garmin 的运动记录中添加 Garmin 设备信息，需要添加`--use_fake_garmin_device`参数，这将在同步的 Garmin 锻炼记录中添加一个 Garmin 设备（默认情况下为 `Garmin Forerunner 245`，您可以在`garmin_device_adaptor.py`中更改设备信息），运动记录中有了设备信息之后就可以同步到其他 APP 中，比如数字心动（攒上马积分）这类不能通过 Apple Watch 同步的 APP，当然也可以同步到 Keep，悦跑圈，咕咚等 APP。
 
-   <img width="830" alt="image" src="https://github.com/yihong0618/running_page/assets/8613196/b5076942-3133-4c89-ad66-a828211667dc">
+   <img width="830" alt="image" src="https://github.com/saymagic/running_page/assets/8613196/b5076942-3133-4c89-ad66-a828211667dc">
 
    最终执行的命令如下：
 
@@ -1147,7 +1147,7 @@ python run_page/intervals_icu_sync.py ${athlete_id} ${api_key} --gcj02
 <br>
 
 - 生成数据展示 SVG
-- 展示效果：[点击查看](https://raw.githubusercontent.com/yihong0618/running_page/master/assets/github.svg)、[点击查看](https://raw.githubusercontent.com/yihong0618/running_page/28fa801e4e30f30af5ae3dc906bf085daa137936/assets/grid.svg)
+- 展示效果：[点击查看](https://raw.githubusercontent.com/saymagic/running_page/master/assets/github.svg)、[点击查看](https://raw.githubusercontent.com/saymagic/running_page/28fa801e4e30f30af5ae3dc906bf085daa137936/assets/grid.svg)
 
 ```bash
 
@@ -1228,7 +1228,7 @@ python run_page/gen_svg.py --from-db --type circular --use-localtime
 生成如果一生只有 1000 个月的 Runner Month of Life
 
 ```bash
-python3 run_page/gen_svg.py --from-db --type monthoflife --birth 1989-03 --special-distance 10 --special-distance2 20 --special-color '#f9d367'  --special-color2 '#f0a1a8' --output assets/mol.svg --use-localtime --athlete yihong0618 --title 'Runner Month of Life'
+python3 run_page/gen_svg.py --from-db --type monthoflife --birth 1989-03 --special-distance 10 --special-distance2 20 --special-color '#f9d367'  --special-color2 '#f0a1a8' --output assets/mol.svg --use-localtime --athlete saymagic --title 'Runner Month of Life'
 ```
 
 自动生成分享图 GPT gpt-image-1([last one](./PNG_OUT/share_image_2025-04-29.png))
@@ -1245,7 +1245,7 @@ python3 run_page/auto_share_sync.py --api_key xxxxxxxxx --base_url xxxxxxxx
 python3 run_page/auto_share_sync.py --api_key xxxxxxxxx --base_url xxxxxxxx --date 2023-11-11
 ```
 
-如果你想自动化 auto share 可以参考这个[链接](https://github.com/yihong0618/run/blob/master/.github/workflows/run_data_sync.yml#L235-242)
+如果你想自动化 auto share 可以参考这个[链接](https://github.com/saymagic/run/blob/master/.github/workflows/run_data_sync.yml#L235-242)
 
 更多展示效果参见：
 <https://github.com/flopp/GpxTrackPoster>
@@ -1326,7 +1326,7 @@ python3 run_page/auto_share_sync.py --api_key xxxxxxxxx --base_url xxxxxxxx --da
 
 <br>
 
-Actions [源码](https://github.com/yihong0618/running_page/blob/master/.github/workflows/run_data_sync.yml)
+Actions [源码](https://github.com/saymagic/running_page/blob/master/.github/workflows/run_data_sync.yml)
 需要做如下步骤
 
 1. 更改成你的 app type 及 info
@@ -1356,7 +1356,7 @@ Actions [源码](https://github.com/yihong0618/running_page/blob/master/.github/
 1. 拿到项目的 actions id（需要自行申请 token）
 
    ```shell
-   curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
+   curl https://api.github.com/repos/saymagic/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
    ```
 
    <center><img src="https://cdn.jujimeizuo.cn/blog/2023/10/get-action-id.jpg" alt="get-action-id"></center>

@@ -11,7 +11,7 @@ with duckdb.connect() as conn:
 """
 examples:
 
-duckdb.sql("select regexp_extract(location_country, '[\u4e00-\u9fa5]{2,}(市 | 自治州 | 特别行政区)') as run_location, concat(try_cast(sum(distance/1000) as integer)::varchar,' km') as run_distance from read_parquet('https://github.com/yihong0618/run/raw/refs/heads/master/run_page/data.parquet') where run_location is not NULL group by run_location order by sum(distance) desc;").show(max_rows=50)
+duckdb.sql("select regexp_extract(location_country, '[\u4e00-\u9fa5]{2,}(市 | 自治州 | 特别行政区)') as run_location, concat(try_cast(sum(distance/1000) as integer)::varchar,' km') as run_distance from read_parquet('https://github.com/saymagic/run/raw/refs/heads/master/run_page/data.parquet') where run_location is not NULL group by run_location order by sum(distance) desc;").show(max_rows=50)
 
 ┌──────────────┬──────────────┐
 │ run_location │ run_distance │
@@ -37,10 +37,10 @@ duckdb.sql("select regexp_extract(location_country, '[\u4e00-\u9fa5]{2,}(市 | �
 │ 16 rows           2 columns │
 └─────────────────────────────┘
 
-duckdb.sql("select start_date_local, distance, name, location_country from read_parquet('https://github.com/yihong0618/run/raw/refs/heads/master/run_page/data.parquet') order by run_id desc limit 1;")
+duckdb.sql("select start_date_local, distance, name, location_country from read_parquet('https://github.com/saymagic/run/raw/refs/heads/master/run_page/data.parquet') order by run_id desc limit 1;")
 
 
-duckdb.sql("select start_date_local[:4] as year, sum(distance/1000)::integer from read_parquet('https://github.com/yihong0618/run/raw/refs/heads/master/run_page/data.parquet') group by year order by year desc;").show(max_rows=50)
+duckdb.sql("select start_date_local[:4] as year, sum(distance/1000)::integer from read_parquet('https://github.com/saymagic/run/raw/refs/heads/master/run_page/data.parquet') group by year order by year desc;").show(max_rows=50)
 
 ┌─────────┬─────────────────────────────────────────┐
 │  year   │ CAST(sum((distance / 1000)) AS INTEGER) │
@@ -63,7 +63,7 @@ duckdb.sql("select start_date_local[:4] as year, sum(distance/1000)::integer fro
 │ 13 rows                                 2 columns │
 └───────────────────────────────────────────────────┘
 
-duckdb.sql("SELECT concat(try_cast(distance/1000 as integer)::varchar,' km') as distance_km,count(*) FROM read_parquet('https://github.com/yihong0618/run/raw/refs/heads/master/run_page/data.parquet') GROUP BY distance_km order by count(*) desc;").show(max_rows=50)
+duckdb.sql("SELECT concat(try_cast(distance/1000 as integer)::varchar,' km') as distance_km,count(*) FROM read_parquet('https://github.com/saymagic/run/raw/refs/heads/master/run_page/data.parquet') GROUP BY distance_km order by count(*) desc;").show(max_rows=50)
 
 ┌─────────────┬──────────────┐
 │ distance_km │ count_star() │

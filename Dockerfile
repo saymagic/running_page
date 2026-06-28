@@ -1,5 +1,5 @@
 
-FROM python:3.10.5-slim AS develop-py
+FROM python:3.12-slim AS develop-py
 WORKDIR /root/running_page
 COPY ./requirements.txt /root/running_page/requirements.txt
 RUN sed -i 's@http://archive.ubuntu.com/ubuntu/@https://mirrors.tuna.tsinghua.edu.cn/ubuntu/@g' /etc/apt/sources.list \
@@ -8,9 +8,8 @@ RUN sed -i 's@http://archive.ubuntu.com/ubuntu/@https://mirrors.tuna.tsinghua.ed
   && apt-get install -y --no-install-recommends git \
   && apt-get purge -y --auto-remove \
   && rm -rf /var/lib/apt/lists/* \
-  && pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pip -U \
-  && pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/ \
-  && pip3 install -r requirements.txt
+  && pip3 install -i https://mirrors.aliyun.com/pypi/simple/ uv -U \
+  && uv pip install --system -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
 FROM node:18  AS develop-node
 WORKDIR /root/running_page

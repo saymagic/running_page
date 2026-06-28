@@ -26,3 +26,7 @@ route.png
 route.svg
 
 .env
+
+# Apple Health export data and database
+apple_health_export/
+run_page/data.db

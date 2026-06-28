@@ -22,18 +22,18 @@
    - For old data: To include `Elevation Gain` for past activities, perform a full reimport.
    - To show the 'Elevation Gain' column, modify `SHOW_ELEVATION_GAIN` in `src/utils/const.ts`
    - note: `Elevation Gain` may be inaccurate. You can use Strava's "Correct Elevation" or Garmin's "Elev Corrections" feature for more precise data.
-6. This project now uses MapCN (free) by default. If you choose to use Mapbox, please get your own token.  Do not use the project maintainer's token - check this [issue](https://github.com/yihong0618/running_page/issues/643) and [issue #1055](https://github.com/yihong0618/running_page/issues/1055)
+6. This project now uses MapCN (free) by default. If you choose to use Mapbox, please get your own token.  Do not use the project maintainer's token - check this [issue](https://github.com/saymagic/running_page/issues/643) and [issue #1055](https://github.com/saymagic/running_page/issues/1055)
 
 <p align="center">
   <img width="150" src="https://raw.githubusercontent.com/shaonianche/gallery/master/running_page/running_page_logo.png" />
 </p>
 
 <h3 align="center">
-  <a href="https://yihong.run"> Create a personal running home page </a>
+  <a href="https://run.saymagic.cn"> Create a personal running home page </a>
 </h3>
 
 <p align="center">
-  <a href="https://github.com/yihong0618/running_page/actions"><img src="https://github.com/yihong0618/running_page/actions/workflows/run_data_sync.yml/badge.svg" alt="GitHub Action"></a>
+  <a href="https://github.com/saymagic/running_page/actions"><img src="https://github.com/saymagic/running_page/actions/workflows/run_data_sync.yml/badge.svg" alt="GitHub Action"></a>
   <a href="https://t.me/running_page"><img src="https://badgen.net/badge/icon/join?icon=telegram&amp;label=usergroup" alt="Chat on telegram"></a>
 </p>
 
@@ -41,9 +41,9 @@
   <img src="https://user-images.githubusercontent.com/15976103/98808834-c02f1d80-2457-11eb-9a7c-70e91faa5e30.gif" alt="demo" width="800">
 </p>
 
-English | [简体中文](https://github.com/yihong0618/running_page/blob/master/README-CN.md) | [Wiki](https://mfydev.github.io/Running-Page-Wiki/)
+English | [简体中文](https://github.com/saymagic/running_page/blob/master/README-CN.md) | [Wiki](https://mfydev.github.io/Running-Page-Wiki/)
 
-## [Runner's Page Show](https://github.com/yihong0618/running_page/issues/12)
+## [Runner's Page Show](https://github.com/saymagic/running_page/issues/12)
 
 <details>
 <summary>Running page runners</summary>
@@ -54,7 +54,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 | ---------------------------------------------------- | ---------------------------------------------- | ----------- |
 | [zhubao315](https://github.com/zhubao315)            | <https://zhubao315.github.io/running>          | Strava      |
 | [shaonianche](https://github.com/shaonianche)        | <https://run.duanfei.org>                      | Strava      |
-| [yihong0618](https://github.com/yihong0618)          | <https://yihong.run>                           | Nike        |
+| [saymagic](https://github.com/saymagic)          | <https://run.saymagic.cn>                           | Apple Watch |
 | [superleeyom](https://github.com/superleeyom)        | <https://running.leeyom.top>                   | Strava      |
 | [geekplux](https://github.com/geekplux)              | <https://activities.geekplux.com>              | Nike        |
 | [guanlan](https://github.com/guanlan)                | <https://grun.vercel.app>                      | Strava      |
@@ -137,7 +137,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 
 ## How it works
 
-![image](https://github.com/yihong0618/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
+![image](https://github.com/saymagic/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
 
 ## Features
 
@@ -182,7 +182,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 Clone or fork the repo.
 
 ```bash
-git clone https://github.com/yihong0618/running_page.git --depth=1
+git clone https://github.com/saymagic/running_page.git --depth=1
 ```
 
 ## Installation and testing (node >= 20 python >= 3.11)
@@ -251,7 +251,7 @@ Open your browser and visit localhost:80
 
 ### Imperial Units
 * add `--build-arg VITE_USE_IMPERIAL=true` to `docker build ...`
-* add `--units imperial` flag to each `python3 run_page/gen_svg.py ...` command in the [Dockerfile](https://github.com/yihong0618/running_page/blob/master/Dockerfile)
+* add `--units imperial` flag to each `python3 run_page/gen_svg.py ...` command in the [Dockerfile](https://github.com/saymagic/running_page/blob/master/Dockerfile)
 
 ## Local sync data
 
@@ -326,17 +326,17 @@ When using **"mapbox"**, **"maptiler"** or **"stadiamaps"**, you must configure 
 ```typescript
 siteMetadata: {
   siteTitle: 'Running Page', #website title
-  siteUrl: 'https://yihong.run', #website url
+  siteUrl: 'https://run.saymagic.cn', #website url
   logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU', #logo img
   description: 'Personal site and blog',
   navLinks: [
     {
       name: 'Blog', #navigation name
-      url: 'https://yihong.run/running', #navigation url
+      url: 'https://run.saymagic.cn/running', #navigation url
     },
     {
       name: 'About',
-      url: 'https://github.com/yihong0618/running_page/blob/master/README-CN.md',
+      url: 'https://github.com/saymagic/running_page/blob/master/README-CN.md',
     },
   ],
 },
@@ -584,7 +584,7 @@ python run_page/garmin_sync_cn_global.py ${garmin_cn_secret_string} ${garmin_sec
 
    ![tg_image_166091873](https://github.com/user-attachments/assets/9d4851d6-849a-4bb7-8ffe-5358fa7328b2)
 
-   if you want to automate the submission of NRC data, you can refer to [issue692](https://github.com/yihong0618/running_page/issues/692#issuecomment-2218849713).
+   if you want to automate the submission of NRC data, you can refer to [issue692](https://github.com/saymagic/running_page/issues/692#issuecomment-2218849713).
 
    If you've previously synced activities and want to continue syncing new ones, with `--continue-sync` args
 
@@ -867,7 +867,7 @@ python run_page/nike_to_strava_sync.py eyJhbGciThiMTItNGIw******  xxx xxx xxx
 
    If you want to add Garmin Device during sync, you should add `--use_fake_garmin_device` argument, this will add a Garmin Device (Garmin Forerunner 245 by default, and you can change device in `garmin_device_adaptor.py`) in synced Garmin workout record, this is essential when you want to sync the workout record to other APP like Keep, JoyRun etc.
 
-   <img width="830" alt="image" src="https://github.com/yihong0618/running_page/assets/8613196/b5076942-3133-4c89-ad66-a828211667dc">
+   <img width="830" alt="image" src="https://github.com/saymagic/running_page/assets/8613196/b5076942-3133-4c89-ad66-a828211667dc">
 
    the final command will be:
 
@@ -1020,7 +1020,7 @@ python run_page/intervals_icu_sync.py ${athlete_id} ${api_key} --gcj02
 <br>
 
 - Generate SVG data display
-- Display of results:[Click to view](https://raw.githubusercontent.com/yihong0618/running_page/master/assets/github.svg)、[Click to view](https://raw.githubusercontent.com/yihong0618/running_page/28fa801e4e30f30af5ae3dc906bf085daa137936/assets/grid.svg)
+- Display of results:[Click to view](https://raw.githubusercontent.com/saymagic/running_page/master/assets/github.svg)、[Click to view](https://raw.githubusercontent.com/saymagic/running_page/28fa801e4e30f30af5ae3dc906bf085daa137936/assets/grid.svg)
 
 ```bash
 
@@ -1101,7 +1101,7 @@ python run_page/gen_svg.py --from-db --type circular --use-localtime
 Generate a "Runner Month of Life" visualization as if your entire life consisted of only 1000 months.
 
 ```bash
-python3 run_page/gen_svg.py --from-db --type monthoflife --birth 1989-03 --special-distance 10 --special-distance2 20 --special-color '#f9d367'  --special-color2 '#f0a1a8' --output assets/mol.svg --use-localtime --athlete yihong0618 --title 'Runner Month of Life'
+python3 run_page/gen_svg.py --from-db --type monthoflife --birth 1989-03 --special-distance 10 --special-distance2 20 --special-color '#f9d367'  --special-color2 '#f0a1a8' --output assets/mol.svg --use-localtime --athlete saymagic --title 'Runner Month of Life'
 ```
 
 Generate your share png using GPT gpt-image-1([last one](./PNG_OUT/share_image_2025-04-29.png))
@@ -1116,7 +1116,7 @@ If you want to generate a share png for a date
 python run_page/auto_share_sync.py --api_key xxxxxxxxx --base_url xxxxxxxx --date 2023-11-11
 ```
 
-If you want to auto gen in ci you can refer this [link](https://github.com/yihong0618/run/blob/master/.github/workflows/run_data_sync.yml#L235-242)
+If you want to auto gen in ci you can refer this [link](https://github.com/saymagic/run/blob/master/.github/workflows/run_data_sync.yml#L235-242)
 
 For more display effects, see:
 <https://github.com/flopp/GpxTrackPoster>
@@ -1199,7 +1199,7 @@ For more display effects, see:
 
 <br>
 
-Actions [source code](https://github.com/yihong0618/running_page/blob/master/.github/workflows/run_data_sync.yml)
+Actions [source code](https://github.com/saymagic/running_page/blob/master/.github/workflows/run_data_sync.yml)
 The following steps need to be taken
 
 1. change to your app type and info
@@ -1237,7 +1237,7 @@ Take the keep app as an example. Close the app after running, and then automatic
 1. Get actions id (need to apply token)
 
    ```bash
-   curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
+   curl https://api.github.com/repos/saymagic/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
    ```
 
    <center><img src="https://cdn.jujimeizuo.cn/blog/2023/10/get-action-id.jpg" alt="get-action-id"></center>
